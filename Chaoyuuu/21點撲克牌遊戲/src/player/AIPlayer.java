@@ -8,7 +8,7 @@ public class AIPlayer extends Player {
     }
 
     @Override
-    public void getCard(Dealer dealer) {
+    public void makeDecision(Dealer dealer) {
         Card card;
 
         //get one card for the first round
@@ -16,11 +16,11 @@ public class AIPlayer extends Player {
         setPlayerScore(card.getNumber());
         System.out.printf( "翻開了 .... %s %d\n請問 %s 要翻開下一張牌嗎(y/n)? ", card.getSuit(), card.getNumber(), this.getPlayerName());
 
-        while (ifHit()){
+        while (isHit()){
             System.out.println("y");
             card = dealer.deal();
             setPlayerScore(card.getNumber());
-            if(overTwentyOne()){  //over, get zero point
+            if(isOverTwentyOne()){  //over, get zero point
                 System.out.printf( "翻開了 .... %s %d\n", card.getSuit(), card.getNumber());
                 return;
             } else {
@@ -31,7 +31,7 @@ public class AIPlayer extends Player {
         return;
     }
 
-    private boolean ifHit(){
+    private boolean isHit(){
         int random = (int)(Math.random() * 100);
         int mod = random % 2;
         delay(200);

@@ -1,31 +1,32 @@
 package game;
 import player.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Player> players = initPlayer();
+        List<Player> players = initPlayers();
         Game game = new Game(players);
 
-        for(int i = 0 ; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             System.out.printf("- - ROUND %d - -", i + 1);
             game.startGame();
         }
         game.gameOver();
     }
 
-    public static ArrayList<Player> initPlayer(){
+    public static List<Player> initPlayers() {
         ArrayList<Player> initPlayers = new ArrayList<>();
 
-        int humanPlayerNum, AIPlayerNum;
+        int humanPlayerNum, aiPlayerNum;
         Scanner scanner = new Scanner(System.in);
 
         //init player
         System.out.print("有幾位玩家? ");
         humanPlayerNum = scanner.nextInt();
         System.out.print("有幾位電腦玩家? ");
-        AIPlayerNum = scanner.nextInt();
+        aiPlayerNum = scanner.nextInt();
 
         scanner.nextLine(); //throw "/n"
 
@@ -36,20 +37,19 @@ public class Main {
             initPlayers.add(humanPlayer);
         }
 
-        for (int i = humanPlayerNum; i < humanPlayerNum + AIPlayerNum; i++){
+        for (int i = humanPlayerNum; i < humanPlayerNum + aiPlayerNum; i++) {
             Player AIPlayer = new AIPlayer(new Attribute("AI-" + i));
             initPlayers.add(AIPlayer);
         }
 
         //random player
-        return randomPlayer(initPlayers);
+        return shufflePlayers(initPlayers);
     }
 
-    public static ArrayList<Player> randomPlayer(ArrayList<Player> initPlayers){
-        //random player
-        ArrayList<Player> players = new ArrayList<>();
+    public static List<Player> shufflePlayers(List<Player> initPlayers) {
+        List<Player> players = new ArrayList<>();
         int totalNum = initPlayers.size();
-        while (totalNum != 0){
+        while (totalNum != 0) {
             int randomNum = (int) (Math.random() * totalNum);
             Player player = initPlayers.remove(randomNum);
             players.add(player);

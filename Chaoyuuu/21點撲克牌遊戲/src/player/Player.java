@@ -34,7 +34,7 @@ public abstract class Player {
         attribute.setTotalScore(newScore);
     }
 
-    public boolean overTwentyOne(){
+    public boolean isOverTwentyOne(){
         int score = attribute.getScore();
         if(score > 21){
             attribute.setScore(0);
@@ -43,5 +43,5 @@ public abstract class Player {
         return false;
     }
 
-    public abstract void getCard(Dealer dealer);
+    public abstract void makeDecision(Dealer dealer);
 }
