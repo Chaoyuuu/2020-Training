@@ -1,18 +1,16 @@
-package bank;
+package dealer;
 
 public class Card {
-    private String suit;
+    private Suit suit;
     private int number;
 
-    //private or public ??????
-
-    public Card(String suit, int number) {
+    public Card(Suit suit, int number) {
         this.suit = suit;
         this.number = number;
     }
 
     public String getSuit() {
-        return suit;
+        return suit.name();
     }
 
     public int getNumber() {

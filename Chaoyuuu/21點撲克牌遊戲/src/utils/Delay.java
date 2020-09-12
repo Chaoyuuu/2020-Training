@@ -4,6 +4,7 @@ public class Delay {
     public static void delay(long ms) {
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException ignored) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 }

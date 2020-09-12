@@ -1,47 +1,47 @@
 package player;
-import bank.*;
 
 public abstract class Player {
-    private Attribute attribute;
+    private int totalScore = 0;
+    private int score = 0;
+    private String name;
 
-    public Player(Attribute attribute) {
-        this.attribute = attribute;
+    public Player(String name) {
+        this.name = name;
     }
 
-    public String getPlayerName() {
-        return attribute.getName();
+    public String getName() {
+        return name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int cardNum) {
+        int newScore = score + cardNum;
+        this.score = newScore;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(int score) {
+        int newScore = totalScore + score;
+        this.totalScore = newScore;
     }
 
     public void resetPlayerScore() {
-        attribute.setScore(0);
+        score = 0;
     }
 
-    public int getPlayerScore() {
-        return  attribute.getScore();
-    }
-
-    public void setPlayerScore(int cardNum) {
-        int newScore = attribute.getScore() + cardNum;
-        attribute.setScore(newScore);
-    }
-
-    public int getPlayerTotalScore() {
-        return  attribute.getTotalScore();
-    }
-
-    public void setPlayerTotalScore(int score) {
-        int newScore = attribute.getTotalScore() + score;
-        attribute.setTotalScore(newScore);
-    }
-
-    public boolean isOverTwentyOne(){
-        int score = attribute.getScore();
-        if(score > 21){
-            attribute.setScore(0);
+    public boolean isOverTwentyOne() {
+        if (score > 21) {
+            resetPlayerScore();
             return true;
         }
         return false;
     }
 
-    public abstract void makeDecision(Dealer dealer);
+    public abstract boolean determineWhetherTakeNextCard();
 }

@@ -1,5 +1,7 @@
 package game;
+
 import player.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,6 +9,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         List<Player> players = initPlayers();
+        printPlayerOrder(players);
         Game game = new Game(players);
 
         for (int i = 0; i < 3; i++) {
@@ -33,12 +36,12 @@ public class Main {
         for (int i = 0; i < humanPlayerNum; i++) {
             System.out.printf("請輸入第%d位玩家的名字: ", i);
             String name = scanner.nextLine();
-            Player humanPlayer = new HumanPlayer(new Attribute(name));
+            Player humanPlayer = new HumanPlayer(name);
             initPlayers.add(humanPlayer);
         }
 
         for (int i = humanPlayerNum; i < humanPlayerNum + aiPlayerNum; i++) {
-            Player AIPlayer = new AIPlayer(new Attribute("AI-" + i));
+            Player AIPlayer = new AIPlayer("AI-" + i);
             initPlayers.add(AIPlayer);
         }
 
@@ -56,5 +59,13 @@ public class Main {
             totalNum--;
         }
         return players;
+    }
+
+    public static void printPlayerOrder(List<Player> players) {
+        System.out.print("順序 : ");
+        for(Player player:players){
+            System.out.printf("%s -> ", player.getName());
+        }
+        System.out.printf("\n\n");
     }
 }
