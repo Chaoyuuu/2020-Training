@@ -7,15 +7,15 @@ public class Player {
     private String playerName;
     private int HP = 20000;
     private int MP = 200;
-    private RoleFactory role;
+    private RoleFactory roleFactory;
 
     public Attackable myAttack;
     public DefenseWeapon myDefenseWeapon;
 
-    public Player(String playerName, RoleFactory role) {
+    public Player(String playerName, RoleFactory roleFactory) {
         this.playerName = playerName;
-        this.role = role;
-        myDefenseWeapon = role.createDefenseWeapon();
+        this.roleFactory = roleFactory;
+        myDefenseWeapon = roleFactory.createDefenseWeapon();
     }
 
     public String getPlayerName() {
@@ -28,14 +28,6 @@ public class Player {
 
     public void setHP(int HP) {
         this.HP = max(HP, 0);
-    }
-
-    public boolean isAlive() {
-        if (HP == 0) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public int attack() {
@@ -53,7 +45,7 @@ public class Player {
     }
 
     private void chooseWeapon() {
-        myAttack = role.createAttackWeapon();
+        myAttack = roleFactory.createAttackWeapon();
     }
 
     private void checkMP() {
