@@ -1,42 +1,49 @@
-import Exception.WebException;
-import WebServer.WebServer;
-import WebServer.WebServer.WebServerFactory;
-
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
-public class ProductServerProxy extends AbstractServer{
+public class ProductServerProxy extends AbstractServer {
 
-    private ProductServer productServer = new ProductServer(this);
+    private Server productServer = new ProductServer();
     private Map<String, Product> products = new HashMap<>();
 
     @Override
-    public void serverRequest(String keyword) {
-        String url = serverURL + "name=" + keyword;
-        try {
-            Stream<String> productId = Arrays.stream(server.request(url).split(","));
-            productId.forEach(this::searchProductCache);
-        } catch (WebException | InterruptedException e) {
-            System.err.println(e.getMessage());
-        }
+    public List<String> serverRequest(String url) {
+        String[] productIds = serverAdapter.request(url).split(",");
+        return getProductDetails(productIds);
     }
 
-    public void searchProductCache(String id) {
-        if (isProductInCache(id)) { //print it otu if find
+    private List<String> getProductDetails(String[] productIds) {
+        List<String> productDetails = new LinkedList<>();
+        for (String id : productIds) {
+            productDetails.add(searchProductCache(id));
+        }
+        return productDetails;
+    }
+
+    private String searchProductCache(String id) {
+        String productDetail = null;
+        if (isProductInCache(id)) {
             Product product = products.get(id);
-            System.out.println(product);
-        } else {    //keep searching it
-            productServer.serverRequest(id);
+            productDetail = product.getDetail();
+        } else {
+            productDetail = getProductDetail(id);
+            addProducts(new Product(id, productDetail));
         }
+        return productDetail;
     }
 
-    public boolean isProductInCache(String id) {
+    private String getProductDetail(String id){
+        String url = "https://server.api/product?id=" + id;
+        return productServer.serverRequest(url).get(0);
+    }
+
+    private boolean isProductInCache(String id) {
         return products.containsKey(id);
     }
 
-    public void addProducts(Product product) {
+    private void addProducts(Product product) {
         products.put(product.getId(), product);
     }
 }

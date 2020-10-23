@@ -1,9 +1,7 @@
-import WebServer.WebServer;
-import WebServer.WebServer.WebServerFactory;
+import java.util.List;
 
 public abstract class AbstractServer implements Server {
-    protected final String serverURL = "https://server.api/product?";
-    protected WebServer server = WebServerFactory.create();
+    protected ServerAdapter serverAdapter = new ServerAdapter();
 
-    public abstract void serverRequest(String url);
+    public abstract List<String> serverRequest(String url);
 }

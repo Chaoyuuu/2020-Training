@@ -1,4 +1,5 @@
+import java.util.List;
+
 public interface Server {
-//    public void searchKeyword(String keyword);
-    public void serverRequest(String url);
+    public List<String> serverRequest(String url);
 }
