@@ -10,7 +10,8 @@ public class ProductServerProxy extends AbstractServer {
 
     @Override
     public List<String> serverRequest(String url) {
-        String[] productIds = serverAdapter.request(url).split(",");
+        // get product ids and return product details
+        String[] productIds = productServer.serverRequest(url).get(0).split(",");
         return getProductDetails(productIds);
     }
 
