@@ -1,16 +1,22 @@
 import java.util.List;
-import java.util.Scanner;
+import Exception.WebException;
 
 public class Client {
-    private final Server server = new ProductServerProxy();
-    private String url;
+    private Server server;
 
-    public void search(String keyword){
-        url = "https://server.api/product?name=" + keyword;
-        printOutput(server.serverRequest(url));
+    public Client(Server server) {
+        this.server = server;
     }
 
-    private void printOutput(List<String> productDetails){
-        productDetails.forEach(System.out::println);
+    public void search(String keyword) {
+        try {
+            List<String> productIds = server.getProductIdByKeyword(keyword);
+            productIds.forEach(id -> {
+                Product product = server.getProductById(id);
+                System.out.println(product.getDetail());
+            });
+        } catch (WebException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
