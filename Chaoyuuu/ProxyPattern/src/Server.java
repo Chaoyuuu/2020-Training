@@ -1,5 +1,6 @@
 import java.util.List;
 
 public interface Server {
-    public List<String> serverRequest(String url);
+    Product getProductById(String id);
+    List<String> getProductIdByKeyword(String keyword);
 }

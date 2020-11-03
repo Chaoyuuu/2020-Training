@@ -12,10 +12,6 @@ public class Product {
         return detail;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getDetail() {
         return detail;
     }
