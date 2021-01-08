@@ -1,65 +1,60 @@
 package game;
 
-import item.Item;
-import item.Player;
+import item.Sprite;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GameMap {
 
-    public static final int BOUNDARY = 4;
-    private Set<Item> items = new HashSet<>();
-    private List<Player> players = new ArrayList<>();
-    private Item[][] map = new Item[BOUNDARY][BOUNDARY];
+    public static final int BOUNDARY = 5;
+    private Set<Sprite> sprites = new HashSet<>();
+    private Sprite[][] map = new Sprite[BOUNDARY][BOUNDARY];
 
-    public GameMap() {
-        initMap();
-    }
-
-    private void initMap() {
-        for (int i = 0; i < BOUNDARY; i++) {
-            for (int k = 0; k < BOUNDARY; k++) {
-                map[i][k] = null;
-            }
-        }
-    }
-
-    public void setPositionOnMap(int x, int y, Item item) {
-        map[x][y] = item;
+    public void setPositionOnMap(int x, int y, Sprite sprite) {
+        map[x][y] = sprite;
     }
 
     public void removePositionOnMap(int x, int y) {
         map[x][y] = null;
     }
 
-    public Item getTheItemByPosition(int x, int y) {
+    public Optional<Sprite> getSpriteByPositionOptional(int x, int y) {
+        return Optional.ofNullable(map[x][y]);
+
+    }
+    public Sprite getSpriteByPosition(int x, int y) {
         return map[x][y];
     }
 
-    public void addItem(Item item) {
-        setPositionOnMap(item.getX(), item.getY(), item);
-        items.add(item);
-        if (item instanceof Player) {
-            players.add((Player) item);
-        }
+    public List<Sprite> getSpritesByCol(int col) {
+        return Arrays.asList(map[col].clone());
     }
 
-    public void removeItem(Item item) {
-        removePositionOnMap(item.getX(), item.getY());
-        items.remove(item);
-        if (item instanceof Player) {
-            int index = players.indexOf(item);
-            players.set(index, null);
+    public List<Sprite> getSpritesByRow(int row) {
+        List<Sprite> sprites = new ArrayList<>();
+        for (int i = 0; i < BOUNDARY; i++ ) {
+            sprites.add(getSpriteByPosition(i, row));
         }
+        return sprites;
+    }
+
+    public static boolean isWithinBoundary(int x, int y) {
+        return x < GameMap.BOUNDARY && x >= 0 && y < GameMap.BOUNDARY && y >= 0;
     }
 
 
+    public void addSprite(Sprite sprite) {
+        sprites.add(sprite);
+        sprite.setGameMap(this);
+    }
 
-    public List<Player> getPlayers() {
-        return players;
+    public void removeSprite(Sprite sprite) {
+        removePositionOnMap(sprite.getX(), sprite.getY());
+        sprites.remove(sprite);
+    }
+
+    public Set<Sprite> getSprites() {
+        return sprites;
     }
 
     @Override
@@ -70,11 +65,11 @@ public class GameMap {
         for (int i = 0; i < BOUNDARY; i++) {
             stringBuilder.append(i).append(" ");
             for (int k = 0; k < BOUNDARY; k++) {
-                Item item = map[k][i];
-                if (item == null) {
+                Sprite sprite = map[k][i];
+                if (sprite == null) {
                     stringBuilder.append("- ");
                 } else {
-                    stringBuilder.append(item.toString());
+                    stringBuilder.append(sprite.toString());
                 }
             }
             stringBuilder.append("\n");

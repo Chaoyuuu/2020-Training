@@ -1,39 +1,44 @@
 package item;
 
-import game.GameMap;
 import state.State;
 import touchHandler.TouchHandler;
 
-public abstract class Player extends Item {
+public abstract class Player extends Sprite {
 
     protected int HP;
     protected State state;
     protected TouchHandler touchHandler;
 
-    public Player(GameMap gameMap, State state, TouchHandler touchHandler) {
-        super(gameMap);
+    public Player(State state, TouchHandler touchHandler) {
+        super();
         this.state = state;
         this.touchHandler = touchHandler;
     }
+
+    public abstract void onRoundBegins();
 
     public abstract void turn();
 
     public abstract void move();
 
-    public abstract void moveVertical();
+    public abstract void moveVertically();
 
-    public abstract void moveHorizontal();
+    public abstract void moveHorizontally();
 
     public abstract void attack();
 
     public abstract void attackGlobal(int minusHP);
 
-    public void minusHP(int minusHP) {
-        this.state.minusHP(this, minusHP);
+    public void damage(int lostHp) {
+        this.state.damage(this, lostHp);
     }
 
     public void setHP(int HP) {
         this.HP = HP;
+    }
+
+    public boolean isAlive() {
+        return HP >= 0;
     }
 
     public int getHP() {

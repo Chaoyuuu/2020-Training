@@ -10,24 +10,25 @@ public class AccelerateState extends State {
         this.round = 3;
     }
 
-
+    @Override
+    public void onRoundBegins(Player player) {
+        player.turn();
+        anotherTurn(player);
+        changeState(player);
+    }
 
     @Override
     public void move(Player player) {
         player.move();
-        anotherTurn(player);
-        changeState(player);
     }
 
     @Override
     public void attack(Player player) {
         player.attack();
-        anotherTurn(player);
-        changeState(player);
     }
 
     @Override
-    public void minusHP(Player player, int minusHP) {
+    public void damage(Player player, int minusHP) {
         player.setHP(player.getHP() - minusHP);
         player.setState(new NormalState());
     }

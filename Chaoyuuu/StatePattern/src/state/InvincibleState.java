@@ -5,23 +5,27 @@ import item.Player;
 //受到攻擊時並不會有任何生命損失
 public class InvincibleState extends State {
     public InvincibleState() {
-        this.round = 2;
+        super(2);
+    }
+
+    @Override
+    public void onRoundBegins(Player player) {
+        player.turn();
+        changeState(player);
     }
 
     @Override
     public void move(Player player) {
         player.move();
-        changeState(player);
     }
 
     @Override
     public void attack(Player player) {
         player.attack();
-        changeState(player);
     }
 
     @Override
-    public void minusHP(Player player, int minusHP) {
+    public void damage(Player player, int minusHP) {
         player.setHP(player.getHP());
     }
 

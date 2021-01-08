@@ -2,7 +2,7 @@ package touchHandler;
 
 
 import game.GameMap;
-import item.Item;
+import item.Sprite;
 import item.Player;
 import item.Treasure;
 
@@ -11,25 +11,22 @@ public class TouchTreasure extends TouchHandler {
         super(next);
     }
 
+
     @Override
-    public void touch(Item item, Player player) {
-        if (isTreasure(item)) {
-            player.updatePosition(player.getX(), player.getY());
-            player.setState(((Treasure) item).getState());
-            System.out.println("player get the treasure");
-            removeTreasure(item);
-        } else {
-            super.touch(item, player);
-        }
-
+    protected boolean match(Sprite sprite, Player player) {
+        return sprite instanceof Treasure;
     }
 
-    private boolean isTreasure(Item item) {
-        return item instanceof Treasure;
+    @Override
+    protected void handle(Sprite sprite, Player player) {
+        player.updatePosition(player.getX(), player.getY());
+        player.setState(((Treasure) sprite).getState());
+        System.out.println("player get the treasure");
+        removeTreasure(sprite);
     }
 
-    private void removeTreasure(Item item) {
-        GameMap gameMap = item.getGameMap();
-        gameMap.removeItem(item);
+    private void removeTreasure(Sprite sprite) {
+        GameMap gameMap = sprite.getGameMap();
+        gameMap.removeSprite(sprite);
     }
 }

@@ -1,12 +1,7 @@
 package item;
 
-import game.GameMap;
 
-
-public class Obstacle extends Item {
-    public Obstacle(GameMap gameMap) {
-        super(gameMap);
-    }
+public class Obstacle extends Sprite {
 
     @Override
     public String toString() {

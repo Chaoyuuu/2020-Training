@@ -5,33 +5,39 @@ import item.Monster;
 import item.Player;
 
 //每回合將恢復30點生命值，直到滿血，滿血後立刻恢復至正常狀態
-public class RegainState extends State {
-    public RegainState() {
+public class RestoreState extends State {
+    public RestoreState() {
         this.round = 5;
     }
 
     @Override
-    public void move(Player player) {
+    public void onRoundBegins(Player player) {
         addHP(player, 30);
+        System.out.println("in regain state HP + 30");
+        player.turn();
+        changeStateIfExpires(player);
+    }
+
+    @Override
+    public void move(Player player) {
         player.move();
-        changeState(player);
     }
 
     @Override
     public void attack(Player player) {
-        addHP(player, 30);
         player.attack();
-        changeState(player);
     }
 
     @Override
-    public void minusHP(Player player, int minusHP) {
+    public void damage(Player player, int minusHP) {
         player.setHP(player.getHP() - minusHP);
     }
 
     private void addHP(Player player, int addHP) {
         player.setHP(player.getHP() + addHP);
-        if (player.getHP() == getMaxHpFromPlayer(player)) {
+        int maxHP = getMaxHpFromPlayer(player);
+        if (player.getHP() == maxHP) {
+            player.setHP(maxHP);
             player.setState(new NormalState());
         }
     }
@@ -47,9 +53,9 @@ public class RegainState extends State {
         }
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
-        if (this.round < 0 && player.getState() instanceof RegainState) {
+        if (this.round < 0 && player.getState() instanceof RestoreState) {
             player.setState(new NormalState());
         }
     }

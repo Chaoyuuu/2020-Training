@@ -1,7 +1,7 @@
 package touchHandler;
 
-import item.Item;
 import item.Player;
+import item.Sprite;
 
 public abstract class TouchHandler {
     private TouchHandler next;
@@ -10,9 +10,17 @@ public abstract class TouchHandler {
         this.next = next;
     }
 
-    public void touch(Item item, Player player) {
-        if (next != null) {
-            next.touch(item, player);
+    public void touch(Sprite sprite, Player player) {
+        if (match(sprite, player)) {
+            handle(sprite, player);
+        } else {
+            if (next != null) {
+                next.touch(sprite, player);
+            }
         }
     }
+
+    protected abstract boolean match(Sprite sprite, Player player);
+
+    protected abstract void handle(Sprite sprite, Player player);
 }

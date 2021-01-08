@@ -7,11 +7,14 @@ import touchHandler.TouchMonster;
 import touchHandler.TouchObstacle;
 import touchHandler.TouchTreasure;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Game {
     private static GameMap gameMap;
-    private static Random random = new Random();
+    private static final Random random = new Random();
+    private static List<Player> players = new ArrayList<>();
 
     public static void main(String[] args) {
         setUp();
@@ -21,16 +24,24 @@ public class Game {
 
     private static void setUp() {
         gameMap = new GameMap();
-        initPlayer(3);
+        TouchHandler touchHandler = initTouchHandler();
+        initHero(touchHandler);
+        initMonster(3, touchHandler);
         initTreasure(5);
-//        initObstacle(5);
+        initObstacle(5);
     }
 
-    private static void initPlayer(int numOfMonster) {
-        TouchHandler touchHandler = initTouchHandler();
-        new Hero(gameMap, new AccelerateState(), touchHandler);
-        for (int i = 0; i < numOfMonster - 1; i++) {
-            new Monster(gameMap, new AccelerateState(), touchHandler, Character.toString((char) (i + 65)));
+    private static void initHero(TouchHandler touchHandler) {
+        Player hero = new Hero(new NormalState(), touchHandler);
+        players.add(hero);
+        addSpriteToGameMap(hero);
+    }
+
+    private static void initMonster(int numOfMonster, TouchHandler touchHandler) {
+        for (int i = 0; i <= numOfMonster - 1; i++) {
+            Monster monster = new Monster(new NormalState(), touchHandler, Character.toString((char) (i + 'A')));
+            addSpriteToGameMap(monster);
+            players.add(monster);
         }
     }
 
@@ -38,43 +49,48 @@ public class Game {
         return new TouchMonster(new TouchObstacle(new TouchTreasure(null)));
     }
 
+    private static void addSpriteToGameMap(Sprite sprite) {
+        gameMap.addSprite(sprite);
+        sprite.setRandomPosition();
+    }
+
     private static void initTreasure(int numOfTreasure) {
         for (int i = 0; i < numOfTreasure; i++) {
-            setTreasureInRandom();
+            addTreasureInRandom();
         }
     }
 
-    private static void setTreasureInRandom() {
+    private static void addTreasureInRandom() {
         int num = random.nextInt(100);
         if (num < 10) {
-            new Treasure(gameMap, new InvincibleState());
+            addSpriteToGameMap(new Treasure(new InvincibleState()));
         } else if (num < 35) {
-            new Treasure(gameMap, new PoisonState());
+            addSpriteToGameMap(new Treasure(new PoisonState()));
         } else if (num < 55) {
-            new Treasure(gameMap, new AccelerateState());
+            addSpriteToGameMap(new Treasure(new AccelerateState()));
         } else if (num < 70) {
-            new Treasure(gameMap, new RegainState());
+            addSpriteToGameMap(new Treasure(new RestoreState()));
         } else if (num < 80) {
-            new Treasure(gameMap, new ChaosState());
+            addSpriteToGameMap(new Treasure(new ChaosState()));
         } else if (num < 90) {
-            new Treasure(gameMap, new AccumulateState());
-        } else if (num < 100) {
-            new Treasure(gameMap, new TeleportState());
+            addSpriteToGameMap(new Treasure(new AccumulateState()));
+        } else {
+            addSpriteToGameMap(new Treasure(new TeleportationState()));
         }
     }
 
-    private static void initObstacle(int num) {
-        for (int i = 0; i < num; i++) {
-            new Obstacle(gameMap);
+    private static void initObstacle(int numOfObstacle) {
+        for (int i = 0; i < numOfObstacle; i++) {
+            addSpriteToGameMap(new Obstacle());
         }
     }
 
     private static void startGame() {
         while (!endGame()) {
-            gameMap.getPlayers().stream()
-                    .filter(Objects::nonNull)
-                    .forEach(m -> {
-                        m.turn();
+            players.stream()
+                    .filter(Player::isAlive)
+                    .forEach(p -> {
+                        p.onRoundBegins();
                         removeDeadPlayers();
                         System.out.println(gameMap);
                     });
@@ -82,20 +98,16 @@ public class Game {
     }
 
     private static void removeDeadPlayers() {
-        gameMap.getPlayers().stream()
-                .filter(Objects::nonNull)
-                .forEach(p -> {
-                    if (p.getHP() <= 0) {
-                        gameMap.removeItem(p);
-                    }
-                });
+        players.stream()
+                .filter(p -> !p.isAlive())
+                .forEach(p -> gameMap.removeSprite(p));
     }
 
     private static boolean endGame() {
-        if (gameMap.getPlayers().stream().noneMatch(p -> p instanceof Monster)) {
+        if (players.stream().filter(Player::isAlive).noneMatch(p -> p instanceof Monster)) {
             System.out.println("Hero Win !!!");
             return true;
-        } else if (gameMap.getPlayers().stream().noneMatch(p -> p instanceof Hero)) {
+        } else if (players.stream().filter(Player::isAlive).noneMatch(p -> p instanceof Hero)) {
             System.out.println("Hero loose !!!");
             return true;
         }

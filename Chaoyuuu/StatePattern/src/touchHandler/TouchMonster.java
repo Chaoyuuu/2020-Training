@@ -1,6 +1,6 @@
 package touchHandler;
 
-import item.Item;
+import item.Sprite;
 import item.Monster;
 import item.Player;
 
@@ -10,16 +10,12 @@ public class TouchMonster extends TouchHandler {
     }
 
     @Override
-    public void touch(Item item, Player player) {
-        if (isMonster(item)) {
-            player.updatePosition(player.getX(), player.getY());
-        } else {
-            super.touch(item, player);
-        }
-
+    protected boolean match(Sprite sprite, Player player) {
+        return sprite instanceof Monster;
     }
 
-    private boolean isMonster(Item item) {
-        return item instanceof Monster;
+    @Override
+    protected void handle(Sprite sprite, Player player) {
+        player.updatePosition(player.getX(), player.getY());
     }
 }

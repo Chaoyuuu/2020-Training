@@ -9,30 +9,34 @@ public class ChaosState extends State {
     private Random random = new Random();
 
     public ChaosState() {
-        this.round = 3;
+        super(3);
+    }
+
+    @Override
+    public void onRoundBegins(Player player) {
+        player.turn();
+        changeState(player);
     }
 
     @Override
     public void move(Player player) {
         switch (random.nextInt(2)) {
             case 0:
-                player.moveHorizontal();
+                player.moveHorizontally();
                 break;
             case 1:
-                player.moveVertical();
+                player.moveVertically();
                 break;
         }
-        changeState(player);
     }
 
     @Override
     public void attack(Player player) {
         player.attack();
-        changeState(player);
     }
 
     @Override
-    public void minusHP(Player player, int minusHP) {
+    public void damage(Player player, int minusHP) {
         player.setHP(player.getHP() - minusHP);
     }
 

@@ -3,11 +3,10 @@ package item;
 import game.GameMap;
 import state.State;
 
-public class Treasure extends Item implements Cloneable {
+public class Treasure extends Sprite implements Cloneable {
     protected State state;
 
-    public Treasure(GameMap gameMap, State state) {
-        super(gameMap);
+    public Treasure(State state) {
         this.state = state;
     }
 

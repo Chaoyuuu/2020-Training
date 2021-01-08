@@ -9,6 +9,11 @@ public class NormalState extends State {
     }
 
     @Override
+    public void onRoundBegins(Player player) {
+        player.turn();
+    }
+
+    @Override
     public void move(Player player) {
         player.move();
     }
@@ -19,7 +24,7 @@ public class NormalState extends State {
     }
 
     @Override
-    public void minusHP(Player player, int minusHP) {
+    public void damage(Player player, int minusHP) {
         player.setHP(player.getHP() - minusHP);
     }
 }

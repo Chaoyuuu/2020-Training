@@ -9,19 +9,23 @@ public class AccumulateState extends State {
     }
 
     @Override
+    public void onRoundBegins(Player player) {
+        player.turn();
+        changeState(player);
+    }
+
+    @Override
     public void move(Player player) {
         player.move();
-        changeState(player);
     }
 
     @Override
     public void attack(Player player) {
         player.attack();
-        changeState(player);
     }
 
     @Override
-    public void minusHP(Player player, int minusHP) {
+    public void damage(Player player, int minusHP) {
         player.setHP(player.getHP() - minusHP);
         player.setState(new NormalState());
     }

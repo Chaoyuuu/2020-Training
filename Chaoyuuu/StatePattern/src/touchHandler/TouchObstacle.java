@@ -1,8 +1,8 @@
 package touchHandler;
 
-import item.Item;
 import item.Obstacle;
 import item.Player;
+import item.Sprite;
 
 public class TouchObstacle extends TouchHandler {
 
@@ -11,16 +11,13 @@ public class TouchObstacle extends TouchHandler {
     }
 
     @Override
-    public void touch(Item item, Player player) {
-        if (isObstacle(item)) {
-            player.updatePosition(player.getX(), player.getY());
-        } else {
-            super.touch(item, player);
-        }
-
+    protected boolean match(Sprite sprite, Player player) {
+        return sprite instanceof Obstacle;
     }
 
-    private boolean isObstacle(Item item) {
-        return item instanceof Obstacle;
+    @Override
+    protected void handle(Sprite sprite, Player player) {
+        player.updatePosition(player.getX(), player.getY());
     }
+
 }

@@ -2,15 +2,20 @@ package state;
 
 import item.Player;
 
-public class PoisonState extends State {
-    public PoisonState() {
-        this.round = 3;
+import java.util.Random;
+
+//一回合後主角的位置將被隨機移動至任一空地
+public class TeleportationState extends State {
+    private final Random random = new Random();
+
+    public TeleportationState() {
+        this.round = 1;
     }
 
     @Override
     public void onRoundBegins(Player player) {
-        player.damage(15);
-        System.out.println("in poison state HP -15");
+        teleport(player);
+        System.out.println(player.getGameMap());
         player.turn();
         changeState(player);
     }
@@ -30,9 +35,14 @@ public class PoisonState extends State {
         player.setHP(player.getHP() - minusHP);
     }
 
+    private void teleport(Player player) {
+        player.setRandomPosition();
+        player.updatePosition(player.getX(), player.getY());
+    }
+
     private void changeState(Player player) {
         this.round--;
-        if (this.round < 0 && player.getState() instanceof PoisonState) {
+        if (this.round <= 0 && player.getState() instanceof TeleportationState) {
             player.setState(new NormalState());
         }
     }

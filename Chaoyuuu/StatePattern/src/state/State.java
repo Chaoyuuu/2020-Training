@@ -6,10 +6,19 @@ public abstract class State {
 
     protected int round;
 
-//    public abstract void effectState(Player player);
+    public State() {
+    }
+
+    public State(int round) {
+        // TODO make subclasses use this constructor to init the round
+        this.round = round;
+    }
+
+    public abstract void onRoundBegins(Player player);
+
     public abstract void move(Player player);
 
     public abstract void attack(Player player);
 
-    public abstract void minusHP(Player player, int minusHP);
+    public abstract void damage(Player player, int minusHP);
 }

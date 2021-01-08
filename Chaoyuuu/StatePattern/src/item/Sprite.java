@@ -4,26 +4,33 @@ import game.GameMap;
 
 import java.util.Random;
 
-public class Item {
+public class Sprite {
 
     protected GameMap gameMap;
     protected int x;
     protected int y;
     private final Random rand = new Random();
 
-    public Item(GameMap gameMap) {
-        this.gameMap = gameMap;
-        setInitPosition();
+    public Sprite() {
     }
 
-    private void setInitPosition() {
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    public void setRandomPosition() {
         this.x = rand.nextInt(GameMap.BOUNDARY);
         this.y = rand.nextInt(GameMap.BOUNDARY);
         while (hasCollision()) {
             this.x = rand.nextInt(GameMap.BOUNDARY);
             this.y = rand.nextInt(GameMap.BOUNDARY);
         }
-        gameMap.addItem(this);
+        gameMap.setPositionOnMap(x, y, this);
+    }
+
+    private boolean hasCollision() {
+        Sprite sprite = gameMap.getSpriteByPosition(this.x, this.y);
+        return sprite != null;
     }
 
     public void updatePosition(int x, int y) {
@@ -31,11 +38,6 @@ public class Item {
         gameMap.setPositionOnMap(x, y, this);
         this.x = x;
         this.y = y;
-    }
-
-    private boolean hasCollision() {
-        Item item = gameMap.getTheItemByPosition(this.x, this.y);
-        return item != null;
     }
 
     public int getX() {
