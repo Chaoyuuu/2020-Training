@@ -6,7 +6,7 @@ import java.util.*;
 
 public class GameMap {
 
-    public static final int BOUNDARY = 5;
+    public static final int BOUNDARY = 10;
     private Set<Sprite> sprites = new HashSet<>();
     private Sprite[][] map = new Sprite[BOUNDARY][BOUNDARY];
 
@@ -22,6 +22,7 @@ public class GameMap {
         return Optional.ofNullable(map[x][y]);
 
     }
+
     public Sprite getSpriteByPosition(int x, int y) {
         return map[x][y];
     }
@@ -32,16 +33,19 @@ public class GameMap {
 
     public List<Sprite> getSpritesByRow(int row) {
         List<Sprite> sprites = new ArrayList<>();
-        for (int i = 0; i < BOUNDARY; i++ ) {
+        for (int i = 0; i < BOUNDARY; i++) {
             sprites.add(getSpriteByPosition(i, row));
         }
         return sprites;
     }
 
+    public boolean spriteExist(Sprite sprite) {
+        return sprites.contains(sprite);
+    }
+
     public static boolean isWithinBoundary(int x, int y) {
         return x < GameMap.BOUNDARY && x >= 0 && y < GameMap.BOUNDARY && y >= 0;
     }
-
 
     public void addSprite(Sprite sprite) {
         sprites.add(sprite);

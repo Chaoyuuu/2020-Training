@@ -71,6 +71,8 @@ public class Hero extends Player {
             case 2:
                 trySetPosition(this.x, this.y + 1, Direction.DOWN);
                 break;
+            default:
+                System.out.println("Input Error");
         }
     }
 
@@ -84,6 +86,8 @@ public class Hero extends Player {
             case 2:
                 trySetPosition(this.x - 1, this.y, Direction.LEFT);
                 break;
+            default:
+                System.out.println("Input Error");
         }
     }
 
@@ -100,22 +104,21 @@ public class Hero extends Player {
     public void attack() {
         switch (this.direction) {
             case UP:
-                attackForwardSprite(gameMap.getSpritesByCol(this.x), this.y, -1);
+                attackForwardSprite(gameMap.getSpritesByCol(this.x), this.y, -1, this.y + 1);
                 break;
             case DOWN:
-                attackForwardSprite(gameMap.getSpritesByCol(this.x), this.y, 1);
+                attackForwardSprite(gameMap.getSpritesByCol(this.x), this.y, 1, this.y - GameMap.BOUNDARY);
                 break;
             case LEFT:
-                attackForwardSprite(gameMap.getSpritesByRow(this.y), this.x, -1);
+                attackForwardSprite(gameMap.getSpritesByRow(this.y), this.x, -1, this.x + 1);
                 break;
             case RIGHT:
-                attackForwardSprite(gameMap.getSpritesByRow(this.y), this.x, 1);
+                attackForwardSprite(gameMap.getSpritesByRow(this.y), this.x, 1, this.x - GameMap.BOUNDARY);
                 break;
         }
     }
 
-    private void attackForwardSprite(List<Sprite> sprites, int currentPos, int offset) {
-        int delta = currentPos - GameMap.BOUNDARY;
+    private void attackForwardSprite(List<Sprite> sprites, int currentPos, int offset, int delta) {
         for (int i = 1; i < Math.abs(delta); i++) {
             Sprite sprite = sprites.get(currentPos + i * offset);
             if (sprite instanceof Obstacle) {
@@ -130,7 +133,7 @@ public class Hero extends Player {
     public void attackGlobal(int minusHP) {
         gameMap.getSprites().stream()
                 .filter(m -> m instanceof Monster)
-                .forEach(m -> ((Player)m).damage(minusHP));
+                .forEach(m -> ((Player) m).damage(minusHP));
     }
 
     @Override

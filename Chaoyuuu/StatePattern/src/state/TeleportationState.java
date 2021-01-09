@@ -9,7 +9,7 @@ public class TeleportationState extends State {
     private final Random random = new Random();
 
     public TeleportationState() {
-        this.round = 1;
+        super(1);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class TeleportationState extends State {
         teleport(player);
         System.out.println(player.getGameMap());
         player.turn();
-        changeState(player);
+        changeStateIfExpires(player);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TeleportationState extends State {
         player.updatePosition(player.getX(), player.getY());
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
         if (this.round <= 0 && player.getState() instanceof TeleportationState) {
             player.setState(new NormalState());

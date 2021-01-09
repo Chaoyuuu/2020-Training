@@ -5,13 +5,13 @@ import item.Player;
 //兩回合後進入爆發狀態，若在期間遭受攻擊則立刻恢復至正常狀態
 public class AccumulateState extends State {
     public AccumulateState() {
-        this.round = 2;
+        super(2);
     }
 
     @Override
     public void onRoundBegins(Player player) {
         player.turn();
-        changeState(player);
+        changeStateIfExpires(player);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AccumulateState extends State {
         player.setState(new NormalState());
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
         if (this.round <= 0 && player.getState() instanceof AccumulateState) {
             player.setState(new BurstState());

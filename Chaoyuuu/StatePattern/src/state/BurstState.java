@@ -5,13 +5,13 @@ import item.Player;
 //能夠進行全場攻擊，且攻擊力為50，三回合過後取得瞬身狀態
 public class BurstState extends State {
     public BurstState() {
-        this.round = 3;
+        super(3);
     }
 
     @Override
     public void onRoundBegins(Player player) {
         player.turn();
-        changeState(player);
+        changeStateIfExpires(player);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class BurstState extends State {
         player.setHP(player.getHP() - minusHP);
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
         if (this.round <= 0 && player.getState() instanceof BurstState) {
             player.setState(new TeleportationState());

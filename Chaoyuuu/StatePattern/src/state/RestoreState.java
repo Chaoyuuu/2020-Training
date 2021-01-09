@@ -7,7 +7,7 @@ import item.Player;
 //每回合將恢復30點生命值，直到滿血，滿血後立刻恢復至正常狀態
 public class RestoreState extends State {
     public RestoreState() {
-        this.round = 5;
+        super(5);
     }
 
     @Override
@@ -34,11 +34,13 @@ public class RestoreState extends State {
     }
 
     private void addHP(Player player, int addHP) {
-        player.setHP(player.getHP() + addHP);
+        int playerHP = player.getHP() + addHP;
         int maxHP = getMaxHpFromPlayer(player);
-        if (player.getHP() == maxHP) {
+        if (playerHP >= maxHP) {
             player.setHP(maxHP);
             player.setState(new NormalState());
+        } else {
+            player.setHP(playerHP);
         }
     }
 

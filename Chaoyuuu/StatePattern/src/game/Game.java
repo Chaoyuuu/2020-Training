@@ -67,7 +67,7 @@ public class Game {
         } else if (num < 35) {
             addSpriteToGameMap(new Treasure(new PoisonState()));
         } else if (num < 55) {
-            addSpriteToGameMap(new Treasure(new AccelerateState()));
+            addSpriteToGameMap(new Treasure(new SpeedUpState()));
         } else if (num < 70) {
             addSpriteToGameMap(new Treasure(new RestoreState()));
         } else if (num < 80) {
@@ -99,7 +99,7 @@ public class Game {
 
     private static void removeDeadPlayers() {
         players.stream()
-                .filter(p -> !p.isAlive())
+                .filter(p -> !p.isAlive() && gameMap.spriteExist(p))
                 .forEach(p -> gameMap.removeSprite(p));
     }
 

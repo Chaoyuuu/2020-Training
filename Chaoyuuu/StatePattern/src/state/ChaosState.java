@@ -15,7 +15,7 @@ public class ChaosState extends State {
     @Override
     public void onRoundBegins(Player player) {
         player.turn();
-        changeState(player);
+        changeStateIfExpires(player);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ChaosState extends State {
         player.setHP(player.getHP() - minusHP);
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
         if (this.round <= 0 && player.getState() instanceof ChaosState) {
             player.setState(new NormalState());

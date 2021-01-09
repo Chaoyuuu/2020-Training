@@ -4,7 +4,7 @@ import item.Player;
 
 public class PoisonState extends State {
     public PoisonState() {
-        this.round = 3;
+        super(3);
     }
 
     @Override
@@ -12,7 +12,7 @@ public class PoisonState extends State {
         player.damage(15);
         System.out.println("in poison state HP -15");
         player.turn();
-        changeState(player);
+        changeStateIfExpires(player);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class PoisonState extends State {
         player.setHP(player.getHP() - minusHP);
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
         if (this.round < 0 && player.getState() instanceof PoisonState) {
             player.setState(new NormalState());

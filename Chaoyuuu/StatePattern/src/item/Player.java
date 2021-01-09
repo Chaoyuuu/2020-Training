@@ -37,12 +37,12 @@ public abstract class Player extends Sprite {
         this.HP = HP;
     }
 
-    public boolean isAlive() {
-        return HP >= 0;
-    }
-
     public int getHP() {
         return HP;
+    }
+
+    public boolean isAlive() {
+        return HP >= 0;
     }
 
     public void setState(State state) {

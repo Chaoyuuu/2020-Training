@@ -5,7 +5,7 @@ import item.Player;
 
 public class NormalState extends State {
     public NormalState() {
-        this.round = 1;
+        super(1);
     }
 
     @Override

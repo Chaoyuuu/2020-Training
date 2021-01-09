@@ -3,18 +3,18 @@ package state;
 import item.Player;
 
 //每回合可以進行兩次動作，若在期間遭受攻擊則立刻恢復至正常狀態
-public class AccelerateState extends State {
+public class SpeedUpState extends State {
     private int count = 2;
 
-    public AccelerateState() {
-        this.round = 3;
+    public SpeedUpState() {
+        super(3);
     }
 
     @Override
     public void onRoundBegins(Player player) {
         player.turn();
         anotherTurn(player);
-        changeState(player);
+        changeStateIfExpires(player);
     }
 
     @Override
@@ -41,9 +41,9 @@ public class AccelerateState extends State {
         }
     }
 
-    private void changeState(Player player) {
+    private void changeStateIfExpires(Player player) {
         this.round--;
-        if (this.round <= 0 && player.getState() instanceof AccelerateState) {
+        if (this.round <= 0 && player.getState() instanceof SpeedUpState) {
             player.setState(new NormalState());
         }
     }
